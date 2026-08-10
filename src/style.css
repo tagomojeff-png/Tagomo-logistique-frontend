@@ -1976,4 +1976,92 @@ line-height:1.6;
 .resultat-colis {
     margin-top: 25px;
     text-align: left;
+}/* ===== PAGE SUIVI COLIS ===== */
+
+.app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+
+.card {
+
+    width: 100%;
+    max-width: 450px;
+
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 20px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+
+    text-align: center;
+
+}
+
+
+
+.card input {
+
+    width: 90%;
+
+    padding: 14px;
+
+    margin: 10px 0;
+
+    border-radius: 10px;
+
+    border: 1px solid #ddd;
+
+}
+
+
+
+.card button {
+
+    width: 90%;
+
+    padding: 14px;
+
+    border-radius: 10px;
+
+    border: none;
+
+    cursor: pointer;
+
+}
+
+
+
+.resultat-colis {
+
+    margin-top: 25px;
+
+    padding: 20px;
+
+    border-radius: 15px;
+
+    background: #f5f5f5;
+
+    text-align: left;
+
+}
+
+
+.resultat-colis p {
+
+    margin: 10px 0;
+
 }
