@@ -16,7 +16,6 @@ return <Navigate to="/login-admin"/>
 
 const [colis,setColis] = useState([]);
 
-
 const [stats,setStats] = useState({
 
 total:0,
@@ -27,12 +26,9 @@ livre:0
 });
 
 
-
 const [dernierNumero,setDernierNumero] = useState("");
 
 const [message,setMessage] = useState("");
-
-
 
 
 const [form,setForm] = useState({
@@ -50,19 +46,13 @@ statut:"Reçu en Chine"
 
 
 
-
 async function chargerColis(){
-
 
 try{
 
-
 const res = await API.get("/colis");
 
-
 setColis(res.data);
-
-
 
 }
 
@@ -72,10 +62,7 @@ console.log(error);
 
 }
 
-
 }
-
-
 
 
 
@@ -83,16 +70,11 @@ console.log(error);
 
 async function chargerStats(){
 
-
 try{
-
 
 const res = await API.get("/admin/stats");
 
-
 setStats(res.data);
-
-
 
 }
 
@@ -102,9 +84,7 @@ console.log(error);
 
 }
 
-
 }
-
 
 
 
@@ -112,11 +92,9 @@ console.log(error);
 
 useEffect(()=>{
 
-
 chargerColis();
 
 chargerStats();
-
 
 },[]);
 
@@ -125,11 +103,7 @@ chargerStats();
 
 
 
-
-
-
 function handleChange(e){
-
 
 setForm({
 
@@ -137,9 +111,7 @@ setForm({
 
 [e.target.name]:e.target.value
 
-
 });
-
 
 }
 
@@ -152,7 +124,6 @@ setForm({
 
 async function ajouterColis(){
 
-
 try{
 
 
@@ -160,15 +131,23 @@ const res = await API.post(
 
 "/colis",
 
-form
+{
+
+...form,
+
+poids:String(form.poids)
+
+}
 
 );
 
 
 
+// IMPORTANT : vrai nom venant du backend
+
 setDernierNumero(
 
-res.data.numero
+res.data.numero_suivi
 
 );
 
@@ -179,7 +158,6 @@ setMessage(
 "Colis créé avec succès"
 
 );
-
 
 
 
@@ -208,12 +186,16 @@ catch(error){
 
 console.log(error);
 
+setMessage(
+
+"Erreur création colis"
+
+);
+
 }
 
 
 }
-
-
 
 
 
@@ -222,7 +204,6 @@ console.log(error);
 
 
 async function changerStatut(id,statut){
-
 
 try{
 
@@ -240,11 +221,9 @@ statut:statut
 );
 
 
-
 chargerColis();
 
 chargerStats();
-
 
 
 }
@@ -255,11 +234,7 @@ console.log(error);
 
 }
 
-
 }
-
-
-
 
 
 
@@ -283,11 +258,9 @@ await API.delete(
 );
 
 
-
 chargerColis();
 
 chargerStats();
-
 
 
 }
@@ -299,9 +272,7 @@ console.log(error);
 }
 
 
-
 }
-
 
 
 
@@ -318,14 +289,12 @@ navigator.clipboard.writeText(numero);
 
 setMessage(
 
-"Numéro copié"
+"Numéro copié ✅"
 
 );
 
 
-
 }
-
 
 
 
@@ -335,14 +304,12 @@ setMessage(
 
 function logout(){
 
-
 localStorage.removeItem("admin");
-
 
 window.location.href="/login-admin";
 
-
 }
+
 
 
 
@@ -354,9 +321,7 @@ window.location.href="/login-admin";
 return(
 
 
-
 <div className="admin-container">
-
 
 
 
@@ -370,7 +335,6 @@ return(
 Administration Tyson & Co
 
 </h1>
-
 
 
 <button onClick={logout}>
@@ -388,9 +352,7 @@ Déconnexion
 
 
 
-
-{
-message &&
+{message &&
 
 <div className="success-message">
 
@@ -407,113 +369,7 @@ message &&
 
 
 
-<div className="admin-stats">
-
-
-
-<div className="mini-stat">
-
-
-<h2>
-
-{stats.total}
-
-</h2>
-
-
-<p>
-
-Total colis
-
-</p>
-
-
-</div>
-
-
-
-
-
-<div className="mini-stat">
-
-
-<h2>
-
-{stats.transit}
-
-</h2>
-
-
-<p>
-
-En transit
-
-</p>
-
-
-</div>
-
-
-
-
-
-<div className="mini-stat">
-
-
-<h2>
-
-{stats.arrive}
-
-</h2>
-
-
-<p>
-
-Arrivés Cameroun
-
-</p>
-
-
-</div>
-
-
-
-
-
-<div className="mini-stat">
-
-
-<h2>
-
-{stats.livre}
-
-</h2>
-
-
-<p>
-
-Livrés
-
-</p>
-
-
-</div>
-
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-{
-dernierNumero &&
+{dernierNumero &&
 
 
 <div className="numero-box">
@@ -545,21 +401,12 @@ Copier
 </button>
 
 
-
 </div>
 
 
 }
 
 
-
-
-
-
-
-
-
-<div className="admin-content">
 
 
 
@@ -581,10 +428,7 @@ Ajouter un colis
 
 
 
-
 <div className="admin-form">
-
-
 
 
 
@@ -602,8 +446,6 @@ onChange={handleChange}
 
 
 
-
-
 <input
 
 name="telephone"
@@ -615,8 +457,6 @@ value={form.telephone}
 onChange={handleChange}
 
 />
-
-
 
 
 
@@ -634,8 +474,6 @@ onChange={handleChange}
 
 
 
-
-
 <input
 
 name="poids"
@@ -647,8 +485,6 @@ value={form.poids}
 onChange={handleChange}
 
 />
-
-
 
 
 
@@ -667,7 +503,6 @@ onChange={handleChange}
 
 
 
-
 <select
 
 name="statut"
@@ -678,26 +513,21 @@ onChange={handleChange}
 
 >
 
-
 <option>
 Reçu en Chine
 </option>
-
 
 <option>
 Préparation expédition
 </option>
 
-
 <option>
 En transit
 </option>
 
-
 <option>
 Arrivé Cameroun
 </option>
-
 
 <option>
 Livré
@@ -709,15 +539,11 @@ Livré
 
 
 
-
-
 <button onClick={ajouterColis}>
 
 Ajouter le colis
 
 </button>
-
-
 
 
 </div>
@@ -738,10 +564,9 @@ Ajouter le colis
 
 <h2>
 
-Colis récents
+Tous les colis
 
 </h2>
-
 
 
 
@@ -749,22 +574,7 @@ Colis récents
 <div className="parcel-list">
 
 
-
 {
-
-colis.length === 0 ?
-
-
-<p className="empty">
-
-Aucun colis enregistré
-
-</p>
-
-
-
-:
-
 
 colis.map((item)=>(
 
@@ -772,17 +582,14 @@ colis.map((item)=>(
 <div className="parcel-item" key={item.id}>
 
 
-
-<div className="parcel-info">
-
+<div>
 
 
 <h3>
 
-{item.numero}
+{item.numero_suivi}
 
 </h3>
-
 
 
 <p>
@@ -790,11 +597,9 @@ Client : {item.client}
 </p>
 
 
-
 <p>
 Produit : {item.produit}
 </p>
-
 
 
 <p>
@@ -802,11 +607,9 @@ Destination : {item.destination}
 </p>
 
 
-
 <p>
 Statut : {item.statut}
 </p>
-
 
 
 </div>
@@ -815,79 +618,18 @@ Statut : {item.statut}
 
 
 
-
-
-
-
-<div className="parcel-control">
-
-
-
-<select
-
-value={item.statut}
-
-onChange={(e)=>
-
-changerStatut(
-
-item.id,
-
-e.target.value
-
-)
-
-}
-
-
->
-
-
-
-<option>
-Reçu en Chine
-</option>
-
-
-<option>
-Préparation expédition
-</option>
-
-
-<option>
-En transit
-</option>
-
-
-<option>
-Arrivé Cameroun
-</option>
-
-
-<option>
-Livré
-</option>
-
-
-</select>
-
-
-
-
+<div>
 
 
 <button
 
-onClick={()=>copierNumero(item.numero)}
+onClick={()=>copierNumero(item.numero_suivi)}
 
 >
 
 Copier
 
 </button>
-
-
-
 
 
 
@@ -909,9 +651,7 @@ Supprimer
 
 
 
-
 </div>
-
 
 
 ))
@@ -925,15 +665,9 @@ Supprimer
 
 
 
-
 </div>
 
 
-
-
-
-
-</div>
 
 
 
