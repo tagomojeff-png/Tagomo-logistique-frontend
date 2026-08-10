@@ -7,22 +7,25 @@ function Admin() {
 
     const [form, setForm] = useState({
 
-        client:"",
-        telephone:"",
-        produit:"",
-        poids:"",
-        destination:"",
-        statut:"Reçu en Chine"
+        client: "",
+        telephone: "",
+        produit: "",
+        poids: "",
+        destination: "",
+        statut: "Reçu en Chine"
 
     });
 
 
 
-    const [resultat, setResultat] = useState("");
+    const [colisCree, setColisCree] = useState(null);
+
+    const [erreur, setErreur] = useState("");
 
 
 
-    function modifier(e){
+
+    function modifier(e) {
 
         setForm({
 
@@ -37,10 +40,11 @@ function Admin() {
 
 
 
-    async function ajouterColis(){
+
+    async function ajouterColis() {
 
 
-        try{
+        try {
 
 
             const response = await API.post(
@@ -51,7 +55,7 @@ function Admin() {
 
                     ...form,
 
-                    poids:Number(form.poids)
+                    poids: String(form.poids)
 
                 }
 
@@ -59,50 +63,48 @@ function Admin() {
 
 
 
-            console.log(response.data);
+            console.log("Réponse API :", response.data);
 
 
 
-            setResultat(
+            setColisCree(response.data);
 
-                `✅ Colis ajouté avec succès
-
-Numéro de suivi :
-${response.data.numero_suivi}`
-
-            );
+            setErreur("");
 
 
 
 
             setForm({
 
-                client:"",
-                telephone:"",
-                produit:"",
-                poids:"",
-                destination:"",
-                statut:"Reçu en Chine"
+                client: "",
+                telephone: "",
+                produit: "",
+                poids: "",
+                destination: "",
+                statut: "Reçu en Chine"
 
             });
 
 
 
-        }catch(error){
+        } catch (error) {
 
 
             console.log(
 
-                error.response?.data || error
+                "Erreur ajout colis :",
+
+                error.response?.data || error.message
 
             );
 
 
-            setResultat(
-
-                "❌ Erreur lors de la création du colis"
-
+            setErreur(
+                "❌ Erreur lors de l'ajout du colis"
             );
+
+
+            setColisCree(null);
 
 
         }
@@ -114,171 +116,221 @@ ${response.data.numero_suivi}`
 
 
 
-return (
 
-<div className="app">
 
+    return (
 
 
-<header className="header">
+        <div className="app">
 
-<h1>
 
-TYSON & CO ADMIN
 
-</h1>
+            <header className="header">
 
 
-<p>
+                <h1>
+                    TYSON & CO ADMIN
+                </h1>
 
-Gestion des colis
 
-</p>
+                <p>
+                    Gestion des colis
+                </p>
 
 
-</header>
+            </header>
 
 
 
 
 
-<div className="card">
 
 
+            <div className="card">
 
-<h2>
 
-Ajouter un colis
+                <h2>
+                    Ajouter un colis
+                </h2>
 
-</h2>
 
 
 
 
-<input
+                <input
 
-name="client"
+                    name="client"
 
-placeholder="Nom client"
+                    placeholder="Nom client"
 
-value={form.client}
+                    value={form.client}
 
-onChange={modifier}
+                    onChange={modifier}
 
-/>
+                />
 
 
 
 
 
-<input
+                <input
 
-name="telephone"
+                    name="telephone"
 
-placeholder="Téléphone"
+                    placeholder="Téléphone"
 
-value={form.telephone}
+                    value={form.telephone}
 
-onChange={modifier}
+                    onChange={modifier}
 
-/>
+                />
 
 
 
 
 
-<input
+                <input
 
-name="produit"
+                    name="produit"
 
-placeholder="Produit"
+                    placeholder="Produit"
 
-value={form.produit}
+                    value={form.produit}
 
-onChange={modifier}
+                    onChange={modifier}
 
-/>
+                />
 
 
 
 
 
-<input
+                <input
 
-name="poids"
+                    name="poids"
 
-placeholder="Poids"
+                    placeholder="Poids"
 
-value={form.poids}
+                    value={form.poids}
 
-onChange={modifier}
+                    onChange={modifier}
 
-/>
+                />
 
 
 
 
 
-<input
+                <input
 
-name="destination"
+                    name="destination"
 
-placeholder="Destination"
+                    placeholder="Destination"
 
-value={form.destination}
+                    value={form.destination}
 
-onChange={modifier}
+                    onChange={modifier}
 
-/>
+                />
 
 
 
 
 
-<input
+                <input
 
-name="statut"
+                    name="statut"
 
-value={form.statut}
+                    value={form.statut}
 
-onChange={modifier}
+                    onChange={modifier}
 
-/>
+                />
 
 
 
 
 
-<button onClick={ajouterColis}>
+                <button onClick={ajouterColis}>
 
-Ajouter
+                    Ajouter
 
-</button>
+                </button>
 
 
 
 
-<div className="numero-box">
 
 
-<p style={{whiteSpace:"pre-line"}}>
+                {erreur && (
 
-{resultat}
+                    <p className="error">
 
-</p>
+                        {erreur}
 
+                    </p>
 
-</div>
+                )}
 
 
 
-</div>
 
 
-</div>
 
 
-);
+
+                {colisCree && (
+
+
+                    <div className="numero-box">
+
+
+                        <h2>
+                            ✅ Colis créé
+                        </h2>
+
+
+
+                        <p>
+                            Client : {colisCree.client}
+                        </p>
+
+
+
+                        <h2>
+
+                            📦 {colisCree.numero_suivi}
+
+                        </h2>
+
+
+
+                        <p>
+
+                            Copiez ce numéro pour le suivi
+
+                        </p>
+
+
+
+                    </div>
+
+
+                )}
+
+
+
+
+
+
+            </div>
+
+
+
+        </div>
+
+
+    );
 
 
 }
