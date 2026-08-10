@@ -1977,3 +1977,37 @@ line-height:1.6;
     margin-top: 25px;
     text-align: left;
 }
+
+/* Correction uniquement page suivi */
+
+.suivi-page {
+
+    width: 100%;
+
+    min-height: 80vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+}
+
+
+.suivi-page .card {
+
+    margin-left: auto;
+
+    margin-right: auto;
+
+}
+
+
+.resultat-colis {
+
+    margin-top: 20px;
+
+}

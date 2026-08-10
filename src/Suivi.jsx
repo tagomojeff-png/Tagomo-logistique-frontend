@@ -13,25 +13,19 @@ function Suivi() {
 
 
 
+    async function rechercherColis() {
 
-    async function rechercherColis(){
 
+        if (!numero.trim()) {
 
-        if(!numero.trim()){
-
-            setErreur(
-                "Veuillez entrer un numéro de suivi"
-            );
-
+            setErreur("Veuillez entrer un numéro de suivi");
             setColis(null);
-
             return;
 
         }
 
 
-
-        try{
+        try {
 
 
             const response = await API.get(
@@ -39,29 +33,22 @@ function Suivi() {
             );
 
 
-
             setColis(response.data);
 
             setErreur("");
 
 
-
-        }catch(error){
+        } catch (error) {
 
 
             console.log(error.response?.data || error);
 
-
             setColis(null);
 
-
-            setErreur(
-                "Colis introuvable"
-            );
+            setErreur("Colis introuvable");
 
 
         }
-
 
     }
 
@@ -70,7 +57,7 @@ function Suivi() {
 
     return (
 
-        <div className="app">
+        <div className="suivi-page">
 
 
             <header className="header">
@@ -78,6 +65,7 @@ function Suivi() {
                 <h1>
                     TYSON & CO
                 </h1>
+
 
                 <p>
                     Suivi de colis
@@ -95,6 +83,7 @@ function Suivi() {
                 </h2>
 
 
+
                 <input
 
                     type="text"
@@ -103,9 +92,7 @@ function Suivi() {
 
                     value={numero}
 
-                    onChange={
-                        (e)=>setNumero(e.target.value)
-                    }
+                    onChange={(e)=>setNumero(e.target.value)}
 
                 />
 
@@ -121,22 +108,22 @@ function Suivi() {
 
 
 
-                {
-                    erreur &&
+                {erreur && (
 
                     <p className="error">
 
                         {erreur}
 
                     </p>
-                }
+
+                )}
 
 
 
 
 
-                {
-                    colis &&
+
+                {colis && (
 
                     <div className="resultat-colis">
 
@@ -146,55 +133,51 @@ function Suivi() {
                         </h3>
 
 
+
                         <p>
-                            Numéro :
-                            {colis.numero_suivi}
+                            <strong>Numéro suivi :</strong> {colis.numero_suivi}
                         </p>
 
 
                         <p>
-                            Client :
-                            {colis.client}
+                            <strong>Client :</strong> {colis.client}
                         </p>
 
 
                         <p>
-                            Téléphone :
-                            {colis.telephone}
+                            <strong>Téléphone :</strong> {colis.telephone}
                         </p>
 
 
                         <p>
-                            Produit :
-                            {colis.produit}
+                            <strong>Produit :</strong> {colis.produit}
                         </p>
 
 
                         <p>
-                            Poids :
-                            {colis.poids}
+                            <strong>Poids :</strong> {colis.poids} kg
                         </p>
 
 
                         <p>
-                            Destination :
-                            {colis.destination}
+                            <strong>Destination :</strong> {colis.destination}
                         </p>
 
 
                         <p>
-                            Statut :
-                            {colis.statut}
+                            <strong>Statut :</strong> {colis.statut}
                         </p>
+
 
 
                     </div>
 
-                }
+                )}
 
 
 
             </div>
+
 
 
         </div>
@@ -203,7 +186,6 @@ function Suivi() {
 
 
 }
-
 
 
 export default Suivi;
