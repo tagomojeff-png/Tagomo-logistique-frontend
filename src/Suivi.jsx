@@ -2,247 +2,287 @@ import { useState } from "react";
 import API from "./api";
 
 
-function Suivi(){
+function Suivi() {
 
+    const [numero, setNumero] = useState("");
 
-const [numero,setNumero]=useState("");
+    const [colis, setColis] = useState(null);
 
-const [colis,setColis]=useState(null);
+    const [erreur, setErreur] = useState("");
 
-const [erreur,setErreur]=useState("");
 
 
+    async function rechercherColis() {
 
 
+        const numeroPropre = numero.trim();
 
-async function rechercherColis(){
 
 
-const numeroPropre = numero.trim();
+        if (!numeroPropre) {
 
+            setErreur("Veuillez entrer un numéro de suivi");
 
+            setColis(null);
 
+            return;
 
-if(!numeroPropre){
+        }
 
 
-setErreur(
-"Veuillez entrer un numéro de suivi"
-);
 
-setColis(null);
+        try {
 
-return;
 
+            const response = await API.get(
+                `/suivi/${numeroPropre}`
+            );
 
-}
 
 
+            setColis(response.data);
 
+            setErreur("");
 
 
-try{
 
+        } catch (error) {
 
-const response = await API.get(
 
-`/suivi/${numeroPropre}`
+            console.log(
+                error.response?.data || error.message
+            );
 
-);
 
+            setColis(null);
 
+            setErreur("Colis introuvable");
 
 
-setColis(response.data);
+        }
 
-setErreur("");
 
+    }
 
 
 
-}catch(error){
 
+    return (
 
-console.log(
+        <div className="app">
 
-error.response?.data || error
 
-);
+            <header className="header">
 
+                <h1>
+                    TYSON & CO
+                </h1>
 
-setColis(null);
 
+                <p>
+                    Suivi de colis
+                </p>
 
-setErreur(
 
-"Colis introuvable"
+            </header>
 
-);
 
 
-}
 
 
-}
+            <div className="card">
 
 
+                <h2>
+                    Suivi colis
+                </h2>
 
 
 
-return(
 
+                <input
 
-<div className="app">
+                    type="text"
 
+                    placeholder="Ex: TYC-7422086030"
 
+                    value={numero}
 
+                    onChange={(e) => setNumero(e.target.value)}
 
+                />
 
-<header className="header">
 
 
-<h1>
 
-TYSON & CO
+                <button onClick={rechercherColis}>
 
-</h1>
+                    Rechercher
 
+                </button>
 
-<p>
 
-Suivi de colis
 
-</p>
 
 
-</header>
+                {erreur && (
 
+                    <p className="error">
 
+                        {erreur}
 
+                    </p>
 
+                )}
 
 
-<div className="card">
 
 
 
 
 
-<h2>
+                {colis && (
 
-Suivi colis
+                    <div className="resultat-colis">
 
-</h2>
 
+                        <h3>
+                            Colis trouvé ✅
+                        </h3>
 
 
 
+                        <p>
+                            Numéro suivi : {colis.numero_suivi}
+                        </p>
 
-<input
 
-type="text"
 
-placeholder="Ex: TYC-7422086030"
+                        <p>
+                            Client : {colis.client}
+                        </p>
 
-value={numero}
 
-onChange={(e)=>setNumero(e.target.value)}
 
-/>
+                        <p>
+                            Produit : {colis.produit}
+                        </p>
 
 
 
+                        <p>
+                            Destination : {colis.destination}
+                        </p>
 
 
-<button onClick={rechercherColis}>
 
-Rechercher
+                        <p>
+                            Statut : {colis.statut}
+                        </p>
 
-</button>
 
 
 
 
 
+                        <h3>
+                            Progression du colis
+                        </h3>
 
 
-{
 
-erreur &&
 
-<p className="error">
+                        <div className="timeline">
 
-{erreur}
 
-</p>
 
-}
 
 
+                            <div className="step active">
 
 
+                                <div className="circle">
+                                    ✓
+                                </div>
 
 
 
+                                <div>
 
+                                    <h3>
+                                        Reçu en Chine
+                                    </h3>
 
-{
+                                    <p>
+                                        Colis enregistré
+                                    </p>
 
-colis &&
+                                </div>
 
 
 
-<div className="resultat-colis">
+                            </div>
 
 
 
 
 
-<h3>
 
-Colis trouvé ✅
+                            <div className="step">
 
-</h3>
 
+                                <div className="circle">
+                                    2
+                                </div>
 
 
 
+                                <div>
 
+                                    <h3>
+                                        Préparation
+                                    </h3>
 
-<p>
 
-Numéro suivi :
+                                    <p>
+                                        En attente d'expédition
+                                    </p>
 
-{colis.numero_suivi}
+                                </div>
 
-</p>
 
+                            </div>
 
 
 
 
 
-<p>
 
-Client :
 
-{colis.client}
+                            <div className="step">
 
-</p>
 
+                                <div className="circle">
+                                    3
+                                </div>
 
 
 
+                                <div>
 
+                                    <h3>
+                                        Expédié
+                                    </h3>
 
 
-<p>
+                                    <p>
+                                        Départ de Chine
+                                    </p>
 
-Produit :
+                                </div>
 
-{colis.produit}
 
-</p>
+                            </div>
 
 
 
@@ -250,249 +290,83 @@ Produit :
 
 
 
-<p>
+                            <div className="step">
 
-Destination :
 
-{colis.destination}
+                                <div className="circle">
+                                    4
+                                </div>
 
-</p>
 
 
+                                <div>
 
+                                    <h3>
+                                        En transit
+                                    </h3>
 
 
+                                    <p>
+                                        Transport international
+                                    </p>
 
+                                </div>
 
-<h3>
 
-Progression
+                            </div>
 
-</h3>
 
 
 
 
 
 
-<div className="timeline">
+                            <div className="step">
 
 
+                                <div className="circle">
+                                    5
+                                </div>
 
 
 
-<div className="step active">
+                                <div>
 
+                                    <h3>
+                                        Livré
+                                    </h3>
 
-<div className="circle">
 
-✓
+                                    <p>
+                                        Colis reçu
+                                    </p>
 
-</div>
+                                </div>
 
 
+                            </div>
 
-<div>
 
-<h3>
 
-Reçu en Chine
 
-</h3>
 
+                        </div>
 
-<p>
 
-Colis enregistré
 
-</p>
+                    </div>
 
+                )}
 
-</div>
 
 
+            </div>
 
-</div>
 
 
+        </div>
 
-
-
-
-
-
-<div className="step">
-
-
-<div className="circle">
-
-2
-
-</div>
-
-
-<div>
-
-<h3>
-
-Préparation
-
-</h3>
-
-
-<p>
-
-En attente expédition
-
-</p>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<div className="step">
-
-
-<div className="circle">
-
-3
-
-</div>
-
-
-<div>
-
-<h3>
-
-Expédié
-
-</h3>
-
-
-<p>
-
-Départ Chine
-
-</p>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<div className="step">
-
-
-<div className="circle">
-
-4
-
-</div>
-
-
-<div>
-
-<h3>
-
-En transit
-
-</h3>
-
-
-<p>
-
-Transport international
-
-</p>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<div className="step">
-
-
-<div className="circle">
-
-5
-
-</div>
-
-
-<div>
-
-<h3>
-
-Livré
-
-</h3>
-
-
-<p>
-
-Colis reçu
-
-</p>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-</div>
-
-
-
-
-
-</div>
-
-
-}
-
-
-
-</div>
-
-
-
-);
+    );
 
 
 }
