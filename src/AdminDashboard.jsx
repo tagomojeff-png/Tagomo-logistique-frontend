@@ -5,678 +5,738 @@ import API from "./api";
 
 function AdminDashboard(){
 
+    const [colis,setColis] = useState([]);
 
-if(localStorage.getItem("admin") !== "true"){
+    const [stats,setStats] = useState({
+        total:0,
+        transit:0,
+        arrive:0,
+        livre:0
+    });
 
-return <Navigate to="/login-admin"/>
 
-}
+    const [dernierNumero,setDernierNumero] = useState("");
 
+    const [message,setMessage] = useState("");
 
 
-const [colis,setColis] = useState([]);
+    const [form,setForm] = useState({
 
-const [stats,setStats] = useState({
+        client:"",
+        telephone:"",
+        produit:"",
+        poids:"",
+        destination:"",
+        statut:"Reçu en Chine"
 
-total:0,
-transit:0,
-arrive:0,
-livre:0
+    });
 
-});
 
+    const [loading,setLoading] = useState(false);
 
-const [dernierNumero,setDernierNumero] = useState("");
 
-const [message,setMessage] = useState("");
 
+    if(localStorage.getItem("admin") !== "true"){
 
-const [form,setForm] = useState({
+        return <Navigate to="/login-admin"/>;
 
-client:"",
-telephone:"",
-produit:"",
-poids:"",
-destination:"",
-statut:"Reçu en Chine"
+    }
 
-});
 
 
 
 
+    async function chargerColis(){
 
-async function chargerColis(){
+        try{
 
-try{
+            const res = await API.get("/colis");
 
-const res = await API.get("/colis");
+            setColis(res.data || []);
 
-setColis(res.data);
+        }
+        catch(error){
 
-}
+            console.log("Erreur chargement colis",error);
 
-catch(error){
+        }
 
-console.log(error);
+    }
 
-}
 
-}
 
 
 
+    async function chargerStats(){
 
+        try{
 
-async function chargerStats(){
+            const res = await API.get("/admin/stats");
 
-try{
+            setStats(res.data);
 
-const res = await API.get("/admin/stats");
+        }
+        catch(error){
 
-setStats(res.data);
+            console.log("Erreur stats",error);
 
-}
+        }
 
-catch(error){
+    }
 
-console.log(error);
 
-}
 
-}
 
 
+    useEffect(()=>{
 
+        chargerColis();
+        chargerStats();
 
+    },[]);
 
-useEffect(()=>{
 
-chargerColis();
 
-chargerStats();
 
-},[]);
 
 
 
+    function handleChange(e){
 
+        setForm({
 
+            ...form,
 
-function handleChange(e){
+            [e.target.name]:e.target.value
 
-setForm({
+        });
 
-...form,
+    }
 
-[e.target.name]:e.target.value
 
-});
 
-}
 
 
 
 
+    async function ajouterColis(){
 
 
+        if(loading) return;
 
 
-async function ajouterColis(){
+        setLoading(true);
 
-try{
 
+        try{
 
-const res = await API.post(
 
-"/colis",
+            const res = await API.post(
 
-{
+                "/colis",
 
-...form,
+                {
 
-poids:String(form.poids)
+                    ...form,
 
-}
+                    poids:String(form.poids)
 
-);
+                }
 
+            );
 
 
-// IMPORTANT : vrai nom venant du backend
 
-setDernierNumero(
+            console.log("Nouveau colis :",res.data);
 
-res.data.numero_suivi
 
-);
 
+            setDernierNumero(
 
+                res.data.numero_suivi
 
-setMessage(
+            );
 
-"Colis créé avec succès"
 
-);
 
+            setMessage(
 
+                "Colis créé avec succès ✅"
 
-setForm({
+            );
 
-client:"",
-telephone:"",
-produit:"",
-poids:"",
-destination:"",
-statut:"Reçu en Chine"
 
-});
 
+            setForm({
 
+                client:"",
+                telephone:"",
+                produit:"",
+                poids:"",
+                destination:"",
+                statut:"Reçu en Chine"
 
-chargerColis();
+            });
 
-chargerStats();
 
 
+            await chargerColis();
 
-}
+            await chargerStats();
 
-catch(error){
 
-console.log(error);
 
-setMessage(
+        }
 
-"Erreur création colis"
+        catch(error){
 
-);
+            console.log(error);
 
-}
 
+            setMessage(
 
-}
+                "Erreur création colis ❌"
 
+            );
 
+        }
 
 
+        finally{
 
+            setLoading(false);
 
+        }
 
-async function changerStatut(id,statut){
+    }
 
-try{
 
 
-await API.put(
 
-`/colis/${id}`,
 
-{
 
-statut:statut
 
-}
 
-);
 
+    async function changerStatut(id,statut){
 
-chargerColis();
 
-chargerStats();
+        try{
 
 
-}
+            await API.put(
 
-catch(error){
+                `/colis/${id}`,
 
-console.log(error);
+                {
 
-}
+                    statut:statut
 
-}
+                }
 
+            );
 
 
 
+            setMessage(
 
+                "Statut mis à jour ✅"
 
-async function supprimerColis(id){
+            );
 
 
-if(!window.confirm("Supprimer ce colis ?")) return;
+            await chargerColis();
 
+            await chargerStats();
 
 
-try{
 
+        }
 
-await API.delete(
+        catch(error){
 
-`/colis/${id}`
+            console.log(error);
 
-);
+            setMessage(
 
+                "Erreur modification statut"
 
-chargerColis();
+            );
 
-chargerStats();
+        }
 
 
-}
+    }
 
-catch(error){
 
-console.log(error);
 
-}
 
 
-}
 
 
 
 
+    async function supprimerColis(id){
 
 
+        if(!window.confirm("Supprimer ce colis ?")) return;
 
 
-function copierNumero(numero){
 
+        try{
 
-navigator.clipboard.writeText(numero);
 
+            await API.delete(
 
-setMessage(
+                `/colis/${id}`
 
-"Numéro copié ✅"
+            );
 
-);
 
 
-}
+            chargerColis();
 
+            chargerStats();
 
 
+        }
 
+        catch(error){
 
+            console.log(error);
 
+        }
 
-function logout(){
 
-localStorage.removeItem("admin");
+    }
 
-window.location.href="/login-admin";
 
-}
 
 
 
 
 
 
+    function copierNumero(numero){
 
 
+        navigator.clipboard.writeText(numero);
 
-return(
 
+        setMessage(
 
-<div className="admin-container">
+            "Numéro copié ✅"
 
+        );
 
+    }
 
 
 
-<div className="admin-header">
 
 
-<h1>
 
-Administration Tyson & Co
 
-</h1>
 
+    function logout(){
 
-<button onClick={logout}>
 
-Déconnexion
+        localStorage.removeItem("admin");
 
-</button>
 
+        window.location.href="/login-admin";
 
-</div>
 
+    }
 
 
 
 
 
 
-{message &&
 
-<div className="success-message">
+    return(
 
-{message}
+    <div className="admin-container">
 
-</div>
 
-}
 
 
 
+        <div className="admin-header">
 
 
+            <h1>
+                Administration Tyson & Co
+            </h1>
 
 
+            <button onClick={logout}>
+                Déconnexion
+            </button>
 
-{dernierNumero &&
 
+        </div>
 
-<div className="numero-box">
 
 
-<p>
 
-Dernier colis créé :
 
-</p>
 
 
-<h2>
+        {message &&
 
-{dernierNumero}
+            <div className="success-message">
 
-</h2>
+                {message}
 
+            </div>
 
+        }
 
-<button
 
-onClick={()=>copierNumero(dernierNumero)}
 
->
 
-Copier
 
-</button>
 
 
-</div>
 
+        <div className="admin-stats">
 
-}
 
+            <div className="mini-stat">
 
+                <h2>{stats.total}</h2>
 
+                <p>Total colis</p>
 
+            </div>
 
 
+            <div className="mini-stat">
 
+                <h2>{stats.transit}</h2>
 
+                <p>En transit</p>
 
+            </div>
 
-<div className="admin-card">
 
+            <div className="mini-stat">
 
-<h2>
+                <h2>{stats.arrive}</h2>
 
-Ajouter un colis
+                <p>Arrivé Cameroun</p>
 
-</h2>
+            </div>
 
 
+            <div className="mini-stat">
 
+                <h2>{stats.livre}</h2>
 
+                <p>Livré</p>
 
-<div className="admin-form">
+            </div>
 
 
+        </div>
 
-<input
 
-name="client"
 
-placeholder="Nom client"
 
-value={form.client}
 
-onChange={handleChange}
 
-/>
 
 
 
-<input
+        {dernierNumero &&
 
-name="telephone"
 
-placeholder="Téléphone"
+        <div className="numero-box">
 
-value={form.telephone}
 
-onChange={handleChange}
+            <p>
+                Dernier colis créé :
+            </p>
 
-/>
 
+            <h2>
+                {dernierNumero}
+            </h2>
 
 
-<input
+            <button onClick={()=>copierNumero(dernierNumero)}>
 
-name="produit"
+                Copier
 
-placeholder="Produit"
+            </button>
 
-value={form.produit}
 
-onChange={handleChange}
+        </div>
 
-/>
 
+        }
 
 
-<input
 
-name="poids"
 
-placeholder="Poids"
 
-value={form.poids}
 
-onChange={handleChange}
 
-/>
 
+        <div className="admin-card">
 
 
-<input
+            <h2>
+                Ajouter un colis
+            </h2>
 
-name="destination"
 
-placeholder="Destination"
 
-value={form.destination}
+            <div className="admin-form">
 
-onChange={handleChange}
 
-/>
 
+            {
+            Object.keys(form)
+            .filter(key=>key!=="statut")
+            .map(key=>(
 
+                <input
 
+                key={key}
 
-<select
+                name={key}
 
-name="statut"
+                placeholder={key}
 
-value={form.statut}
+                value={form[key]}
 
-onChange={handleChange}
+                onChange={handleChange}
 
->
+                />
 
-<option>
-Reçu en Chine
-</option>
+            ))
 
-<option>
-Préparation expédition
-</option>
+            }
 
-<option>
-En transit
-</option>
 
-<option>
-Arrivé Cameroun
-</option>
 
-<option>
-Livré
-</option>
 
+            <select
 
-</select>
+            name="statut"
 
+            value={form.statut}
 
+            onChange={handleChange}
 
+            >
 
-<button onClick={ajouterColis}>
 
-Ajouter le colis
+            <option>Reçu en Chine</option>
 
-</button>
+            <option>Préparation expédition</option>
 
+            <option>En transit</option>
 
-</div>
+            <option>Arrivé Cameroun</option>
 
+            <option>Livré</option>
 
-</div>
 
+            </select>
 
 
 
 
 
 
+            <button onClick={ajouterColis}>
 
+                {loading ? "Création..." : "Ajouter le colis"}
 
-<div className="admin-card">
+            </button>
 
 
-<h2>
 
-Tous les colis
+            </div>
 
-</h2>
 
+        </div>
 
 
 
-<div className="parcel-list">
 
 
-{
 
-colis.map((item)=>(
 
 
-<div className="parcel-item" key={item.id}>
 
+        <div className="admin-card">
 
-<div>
 
+            <h2>
+                Tous les colis
+            </h2>
 
-<h3>
 
-{item.numero_suivi}
 
-</h3>
 
+            <div className="parcel-list">
 
-<p>
-Client : {item.client}
-</p>
 
+            {
 
-<p>
-Produit : {item.produit}
-</p>
+            colis.length === 0 ?
 
+            <p>
+                Aucun colis enregistré
+            </p>
 
-<p>
-Destination : {item.destination}
-</p>
 
+            :
 
-<p>
-Statut : {item.statut}
-</p>
 
+            colis.map(item=>(
 
-</div>
 
+                <div
 
+                className="parcel-item"
 
+                key={item.id}
 
+                >
 
-<div>
 
 
-<button
+                <div>
 
-onClick={()=>copierNumero(item.numero_suivi)}
 
->
+                    <h3>
 
-Copier
+                        {item.numero_suivi}
 
-</button>
+                    </h3>
 
 
+                    <p>
+                        Client : {item.client}
+                    </p>
 
-<button
 
-className="delete-btn"
+                    <p>
+                        Produit : {item.produit}
+                    </p>
 
-onClick={()=>supprimerColis(item.id)}
 
->
+                    <p>
+                        Destination : {item.destination}
+                    </p>
 
-Supprimer
 
-</button>
 
+                    <p>
+                        Statut : {item.statut}
+                    </p>
 
 
-</div>
+                </div>
 
 
 
-</div>
 
 
-))
+                <div>
 
 
-}
+                <select
 
+                value={item.statut}
 
+                onChange={(e)=>
+                    changerStatut(
+                        item.id,
+                        e.target.value
+                    )
+                }
 
-</div>
+                >
 
+                <option>Reçu en Chine</option>
 
+                <option>Préparation expédition</option>
 
-</div>
+                <option>En transit</option>
 
+                <option>Arrivé Cameroun</option>
 
+                <option>Livré</option>
 
 
+                </select>
 
 
-</div>
 
 
-)
 
+                <button
+
+                onClick={()=>copierNumero(item.numero_suivi)}
+
+                >
+
+                    Copier
+
+                </button>
+
+
+
+
+
+                <button
+
+                className="delete-btn"
+
+                onClick={()=>supprimerColis(item.id)}
+
+                >
+
+                    Supprimer
+
+                </button>
+
+
+
+                </div>
+
+
+
+
+                </div>
+
+
+            ))
+
+
+            }
+
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+    </div>
+
+    );
 
 }
 
