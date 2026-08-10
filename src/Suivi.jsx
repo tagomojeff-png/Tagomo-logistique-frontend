@@ -2,492 +2,243 @@ import { useState } from "react";
 import API from "./api";
 
 
-function Suivi(){
+function Suivi() {
 
+    const [numero, setNumero] = useState("");
+    const [colis, setColis] = useState(null);
+    const [erreur, setErreur] = useState("");
 
-const [numero,setNumero] = useState("");
 
-const [colis,setColis] = useState(null);
+    const etapes = [
+        "Reçu en Chine",
+        "Préparation expédition",
+        "En transit",
+        "Arrivé Cameroun",
+        "Livré"
+    ];
 
-const [erreur,setErreur] = useState("");
 
+    async function rechercherColis() {
 
+        const code = numero.trim();
 
 
+        if (!code) {
+            setErreur("Veuillez entrer un numéro de suivi");
+            setColis(null);
+            return;
+        }
 
-async function rechercherColis(){
 
+        try {
 
-const numeroPropre = numero.trim();
+            const response = await API.get(`/suivi/${code}`);
 
+            setColis(response.data);
+            setErreur("");
 
+        } catch(error) {
 
-if(!numeroPropre){
+            console.log(error.response?.data || error);
 
+            setErreur("Colis introuvable");
+            setColis(null);
 
-setErreur(
-"Veuillez entrer un numéro de suivi"
-);
+        }
 
-setColis(null);
+    }
 
-return;
 
 
-}
+    function positionStatut(statut){
 
+        const index = etapes.findIndex(
+            e => e === statut
+        );
 
+        return index === -1 ? 0 : index;
 
+    }
 
-try{
 
 
-const response = await API.get(
+    return (
 
-`/suivi/${numeroPropre}`
+        <div className="suivi-page">
 
-);
 
+            <div className="suivi-card">
 
 
-setColis(response.data);
+                <h1>
+                    TYSON & CO
+                </h1>
 
-setErreur("");
 
+                <p>
+                    Suivi de votre colis
+                </p>
 
 
-}
 
-catch(error){
+                <div className="tracking-search">
 
 
-console.log(
+                    <input
 
-error.response?.data || error
+                        placeholder="Ex: TYC-7422086030"
 
-);
+                        value={numero}
 
+                        onChange={
+                            e=>setNumero(e.target.value)
+                        }
 
-setColis(null);
+                    />
 
 
-setErreur(
+                    <button onClick={rechercherColis}>
 
-"Colis introuvable"
+                        Rechercher
 
-);
+                    </button>
 
 
-}
+                </div>
 
 
 
-}
 
+                {
+                    erreur &&
 
+                    <p className="error">
 
+                        {erreur}
 
+                    </p>
 
+                }
 
 
-return(
 
 
-<div className="tracking">
 
+                {
+                    colis &&
 
 
-<div className="tracking-card">
+                    <div className="result-card">
 
 
+                        <h2>
+                            Colis trouvé ✅
+                        </h2>
 
 
 
-<h1>
+                        <p>
+                            Numéro :
+                            {colis.numero_suivi}
+                        </p>
 
-TYSON & CO
 
-</h1>
+                        <p>
+                            Client :
+                            {colis.client}
+                        </p>
 
 
+                        <p>
+                            Destination :
+                            {colis.destination}
+                        </p>
 
-<h2>
 
-Suivi de colis
 
-</h2>
+                        <h2>
+                            Progression
+                        </h2>
 
 
 
 
+                        <div className="timeline">
 
 
+                        {
+                            etapes.map((etape,index)=>(
+                                
+                                <div
 
-<div className="tracking-search">
+                                key={etape}
 
+                                className={
+                                    index <= positionStatut(colis.statut)
+                                    ?
+                                    "step active"
+                                    :
+                                    "step"
+                                }
 
+                                >
 
-<input
 
+                                    <div className="circle">
 
-type="text"
+                                        {
+                                            index <= positionStatut(colis.statut)
+                                            ?
+                                            "✓"
+                                            :
+                                            index+1
+                                        }
 
+                                    </div>
 
-placeholder="Ex: TYC-7422086030"
 
+                                    <div>
 
-value={numero}
+                                        <h3>
+                                            {etape}
+                                        </h3>
 
 
-onChange={(e)=>setNumero(e.target.value)}
+                                        {
+                                            index === positionStatut(colis.statut)
+                                            &&
+                                            <p>
+                                                Statut actuel
+                                            </p>
+                                        }
 
 
-/>
+                                    </div>
 
 
+                                </div>
 
+                            ))
 
-<button onClick={rechercherColis}>
+                        }
 
-Rechercher
 
-</button>
+                        </div>
 
 
 
+                    </div>
 
-</div>
+                }
 
 
 
+            </div>
 
 
+        </div>
 
-
-
-{erreur &&
-
-<p className="error">
-
-{erreur}
-
-</p>
-
-}
-
-
-
-
-
-
-
-
-
-
-{colis &&
-
-
-<div className="result-card">
-
-
-
-<h3>
-
-Colis trouvé ✅
-
-</h3>
-
-
-
-
-
-<p>
-
-📦 Numéro :
-{colis.numero_suivi}
-
-</p>
-
-
-
-
-<p>
-
-Client :
-{colis.client}
-
-</p>
-
-
-
-
-<p>
-
-Produit :
-{colis.produit}
-
-</p>
-
-
-
-
-<p>
-
-Destination :
-{colis.destination}
-
-</p>
-
-
-
-
-<p>
-
-Statut :
-{colis.statut}
-
-</p>
-
-
-
-
-
-
-
-
-<h3>
-
-Progression
-
-</h3>
-
-
-
-
-
-
-
-<div className="timeline">
-
-
-
-
-
-<div className="step active">
-
-
-<div className="circle">
-
-✓
-
-</div>
-
-
-<div>
-
-<h3>
-
-Reçu en Chine
-
-</h3>
-
-
-<p>
-
-Colis enregistré
-
-</p>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-
-<div className="step">
-
-
-<div className="circle">
-
-2
-
-</div>
-
-
-<div>
-
-<h3>
-
-Préparation
-
-</h3>
-
-
-<p>
-
-Préparation expédition
-
-</p>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<div className="step">
-
-
-<div className="circle">
-
-3
-
-</div>
-
-
-<div>
-
-<h3>
-
-Expédié
-
-</h3>
-
-
-<p>
-
-Départ Chine
-
-</p>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-
-<div className="step">
-
-
-<div className="circle">
-
-4
-
-</div>
-
-
-<div>
-
-<h3>
-
-En transit
-
-</h3>
-
-
-<p>
-
-Transport international
-
-</p>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<div className="step">
-
-
-<div className="circle">
-
-5
-
-</div>
-
-
-<div>
-
-<h3>
-
-Livré
-
-</h3>
-
-
-<p>
-
-Colis reçu
-
-</p>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-</div>
-
-
-
-
-
-</div>
-
-
-}
-
-
-
-
-
-
-</div>
-
-
-
-</div>
-
-
-)
-
-
+    );
 
 }
 
