@@ -5,8 +5,6 @@ const API = axios.create({
 
     baseURL: "https://tagomo-logistique-backend-production.up.railway.app",
 
-    timeout: 10000,
-
     headers: {
         "Content-Type": "application/json"
     }

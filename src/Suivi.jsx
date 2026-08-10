@@ -6,9 +6,7 @@ function Suivi() {
 
 
     const [numero, setNumero] = useState("");
-
     const [colis, setColis] = useState(null);
-
     const [erreur, setErreur] = useState("");
 
 
@@ -16,21 +14,33 @@ function Suivi() {
     async function rechercherColis() {
 
 
-        if (!numero.trim()) {
+        const numeroPropre = numero.trim();
+
+
+        if (!numeroPropre) {
 
             setErreur("Veuillez entrer un numéro de suivi");
-            setColis(null);
             return;
 
         }
 
 
+
         try {
 
 
+            console.log("Recherche :", numeroPropre);
+
+
+
             const response = await API.get(
-                `/suivi/${numero.trim()}`
+                `/suivi/${numeroPropre}`
             );
+
+
+
+            console.log("Réponse backend :", response.data);
+
 
 
             setColis(response.data);
@@ -38,10 +48,15 @@ function Suivi() {
             setErreur("");
 
 
-        } catch (error) {
+
+        } catch(error) {
 
 
-            console.log(error.response?.data || error);
+            console.log(
+                "Erreur API :",
+                error.response?.data || error.message
+            );
+
 
             setColis(null);
 
@@ -50,26 +65,21 @@ function Suivi() {
 
         }
 
-    }
 
+    }
 
 
 
     return (
 
-        <div className="suivi-page">
+        <div className="app">
 
 
             <header className="header">
 
-                <h1>
-                    TYSON & CO
-                </h1>
+                <h1>TYSON & CO</h1>
 
-
-                <p>
-                    Suivi de colis
-                </p>
+                <p>Suivi de colis</p>
 
             </header>
 
@@ -78,9 +88,7 @@ function Suivi() {
             <div className="card">
 
 
-                <h2>
-                    Suivi colis
-                </h2>
+                <h2>Suivi colis</h2>
 
 
 
@@ -88,7 +96,7 @@ function Suivi() {
 
                     type="text"
 
-                    placeholder="Ex: TYC-1234567890"
+                    placeholder="Ex: TYC-2089931241"
 
                     value={numero}
 
@@ -103,7 +111,6 @@ function Suivi() {
                     Rechercher
 
                 </button>
-
 
 
 
@@ -135,39 +142,28 @@ function Suivi() {
 
 
                         <p>
-                            <strong>Numéro suivi :</strong> {colis.numero_suivi}
+                            Numéro suivi : {colis.numero_suivi}
                         </p>
 
 
                         <p>
-                            <strong>Client :</strong> {colis.client}
+                            Client : {colis.client}
                         </p>
 
 
                         <p>
-                            <strong>Téléphone :</strong> {colis.telephone}
+                            Produit : {colis.produit}
                         </p>
 
 
                         <p>
-                            <strong>Produit :</strong> {colis.produit}
+                            Destination : {colis.destination}
                         </p>
 
 
                         <p>
-                            <strong>Poids :</strong> {colis.poids} kg
+                            Statut : {colis.statut}
                         </p>
-
-
-                        <p>
-                            <strong>Destination :</strong> {colis.destination}
-                        </p>
-
-
-                        <p>
-                            <strong>Statut :</strong> {colis.statut}
-                        </p>
-
 
 
                     </div>
@@ -179,11 +175,9 @@ function Suivi() {
             </div>
 
 
-
         </div>
 
     );
-
 
 }
 
