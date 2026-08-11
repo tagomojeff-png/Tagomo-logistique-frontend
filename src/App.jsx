@@ -7,6 +7,7 @@ import Calculator from "./Calculator.jsx";
 import Suivi from "./Suivi.jsx";
 import LoginAdmin from "./LoginAdmin.jsx";
 import AdminDashboard from "./AdminDashboard.jsx";
+import AssistantClient from "./AssistantClient.jsx";
 
 
 
@@ -203,6 +204,9 @@ element={<AdminDashboard />}
 
 
 </main>
+
+
+<AssistantClient />
 
 
 
