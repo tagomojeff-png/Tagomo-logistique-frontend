@@ -10,448 +10,501 @@ const API_URL =
 function AssistantClient(){
 
 
-    const [ouvert,setOuvert] = useState(false);
+const [ouvert,setOuvert] = useState(false);
 
-    const [message,setMessage] = useState("");
+const [message,setMessage] = useState("");
 
-    const [loading,setLoading] = useState(false);
+const [loading,setLoading] = useState(false);
 
 
 
-    const [messages,setMessages] = useState([
+const [messages,setMessages] = useState([
 
-        {
-            type:"bot",
-            texte:
-            "Bonjour 👋\n\nJe suis Tyson AI 🤖🎙️\nVotre assistant officiel Tyson Logistics.\n\nComment puis-je vous aider aujourd'hui ?"
-        }
+{
+type:"bot",
+texte:
+"Bonjour 👋\n\nJe suis Tyson AI 🤖🎙️\nVotre assistant officiel Tyson Logistics.\n\nComment puis-je vous aider ?"
+}
 
-    ]);
+]);
 
 
 
 
 
-    async function envoyerMessage(){
+// ==========================
+// CONTACT HUMAIN WHATSAPP
+// ==========================
 
 
-        if(!message.trim()) return;
+function contacterHumain(){
 
 
+const texte =
 
-        const nouveauMessage = message;
+"Bonjour Tyson Logistics 👋\n\n" +
 
+"Je viens de votre assistant IA et j'aimerais parler à un conseiller.";
 
 
-        setMessages((prev)=>[
 
-            ...prev,
+const url =
 
-            {
-                type:"user",
-                texte:nouveauMessage
-            }
+"https://wa.me/8613092568896?text="
 
-        ]);
++
 
+encodeURIComponent(texte);
 
 
-        setMessage("");
 
-        setLoading(true);
+window.open(url,"_blank");
 
 
+}
 
-        try{
 
 
-            const response = await fetch(
 
-                API_URL,
 
-                {
 
-                    method:"POST",
+// ==========================
+// ENVOYER MESSAGE IA
+// ==========================
 
-                    headers:{
 
-                        "Content-Type":"application/json"
+async function envoyerMessage(){
 
-                    },
 
+if(!message.trim()) return;
 
-                    body:JSON.stringify({
 
-                        message:nouveauMessage,
 
+const userMessage = message;
 
-                        history:messages.map((m)=>({
 
 
-                            role:
-                            m.type==="user"
-                            ?
-                            "user"
-                            :
-                            "assistant",
+setMessages(prev=>[
 
+...prev,
 
-                            content:m.texte
+{
 
+type:"user",
 
-                        }))
+texte:userMessage
 
+}
 
-                    })
+]);
 
 
-                }
 
-            );
+setMessage("");
 
+setLoading(true);
 
 
-            const data = await response.json();
 
+try{
 
 
+const response = await fetch(
 
-            setMessages((prev)=>[
+API_URL,
 
-                ...prev,
+{
 
-                {
+method:"POST",
 
-                    type:"bot",
+headers:{
 
-                    texte:
+"Content-Type":"application/json"
 
-                    data.reply ||
+},
 
-                    "Je n'ai pas reçu de réponse."
 
-                }
+body:JSON.stringify({
 
-            ]);
+message:userMessage,
 
 
+history:messages.map(m=>(
 
-        }
+{
 
-        catch(error){
+role:
 
+m.type==="user"
 
-            console.error(error);
+?
 
+"user"
 
+:
 
-            setMessages((prev)=>[
+"assistant",
 
-                ...prev,
 
+content:m.texte
 
-                {
+}
 
-                    type:"bot",
+))
 
-                    texte:
 
-                    "⚠️ Tyson AI est momentanément indisponible. Veuillez réessayer."
+})
 
-                }
 
-            ]);
+}
 
+);
 
-        }
 
 
+const data = await response.json();
 
-        setLoading(false);
 
 
-    }
+setMessages(prev=>[
 
+...prev,
 
+{
 
+type:"bot",
 
+texte:
 
+data.reply ||
 
-    return (
+"Je n'ai pas reçu de réponse."
 
+}
 
-        <div className="assistant-client">
+]);
 
 
+}
 
-            {
 
 
-            ouvert &&
+catch(error){
 
 
-            <div className="assistant-window">
+console.log(error);
 
 
+setMessages(prev=>[
 
-                <div className="assistant-header">
+...prev,
 
+{
 
+type:"bot",
 
-                    <div className="ai-brand">
+texte:
 
+"⚠️ Tyson AI est temporairement indisponible."
 
-                        <div className="ai-avatar">
+}
 
-                            🤖🎙️
+]);
 
-                        </div>
 
+}
 
 
-                        <div>
 
+setLoading(false);
 
-                            <div className="ai-title">
 
-                                Tyson AI
+}
 
-                            </div>
 
 
-                            <div className="ai-role">
 
-                                CHATBOT
 
-                            </div>
 
+return (
 
+<div className="assistant-client">
 
-                            <div className="online">
 
-                                🟢 Online
 
-                            </div>
+{
 
+ouvert &&
 
-                        </div>
 
+<div className="assistant-window">
 
-                    </div>
 
 
+<div className="assistant-header">
 
 
 
-                    <button
+<div className="ai-brand">
 
-                    className="close-btn"
 
-                    onClick={()=>setOuvert(false)}
+<div className="ai-avatar">
 
-                    >
+🤖🎙️
 
-                        ✕
+</div>
 
-                    </button>
 
 
+<div>
 
-                </div>
 
+<div className="ai-title">
 
+Tyson AI
 
+</div>
 
 
+<div className="ai-role">
 
-                <div className="assistant-body">
+CHATBOT
 
+</div>
 
 
-                    {
+<div className="online">
 
-                    messages.map((m,index)=>(
+🟢 Online
 
+</div>
 
-                        <div
 
-                        key={index}
 
-                        className={
+</div>
 
-                            m.type==="bot"
 
-                            ?
 
-                            "bubble bot"
+</div>
 
-                            :
 
-                            "bubble user"
 
-                        }
 
+<button
 
-                        >
+className="close-btn"
 
-                            {m.texte}
+onClick={()=>setOuvert(false)}
 
+>
 
-                        </div>
+✕
 
+</button>
 
-                    ))
 
-                    }
 
+</div>
 
 
 
 
-                    {
 
-                    loading &&
 
 
-                    <div className="bubble bot typing">
+<div className="assistant-body">
 
 
-                        Tyson AI écrit...
+{
 
+messages.map((m,index)=>(
 
-                    </div>
 
+<div
 
-                    }
+key={index}
 
+className={
 
+m.type==="bot"
 
+?
 
+"bubble bot"
 
-                </div>
+:
 
+"bubble user"
 
+}
 
+>
 
+{m.texte}
 
+</div>
 
 
-                <div className="assistant-input">
+))
 
+}
 
 
-                    <input
 
 
-                    value={message}
+{
 
+loading &&
 
-                    placeholder="Écrivez votre message..."
 
+<div className="bubble bot typing">
 
-                    onChange={
+Tyson AI écrit...
 
-                        (e)=>
+</div>
 
-                        setMessage(e.target.value)
 
-                    }
+}
 
 
 
-                    onKeyDown={
 
-                        (e)=>{
 
+</div>
 
-                            if(e.key==="Enter"){
 
-                                envoyerMessage();
 
-                            }
 
 
-                        }
 
-                    }
 
+<div className="assistant-actions">
 
-                    />
 
+<button
 
+className="human-button"
 
+onClick={contacterHumain}
 
+>
 
-                    <button
+💬 Parler à un conseiller
 
-                    onClick={envoyerMessage}
+</button>
 
-                    >
 
-                        🎙️
+</div>
 
-                    </button>
 
 
 
-                </div>
 
 
 
 
-            </div>
+<div className="assistant-input">
 
 
+<input
 
-            }
 
+value={message}
 
 
+placeholder="Écrivez votre message..."
 
 
+onChange={(e)=>setMessage(e.target.value)}
 
 
-            <button
 
+onKeyDown={(e)=>{
 
-            className="assistant-bulle"
 
+if(e.key==="Enter"){
 
-            onClick={()=>setOuvert(!ouvert)}
+envoyerMessage();
 
+}
 
-            >
 
+}}
 
-                <div className="floating-ai">
 
+/>
 
-                    <div>
 
-                        🤖🎙️
 
-                    </div>
 
+<button
 
-                    <span>
+onClick={envoyerMessage}
 
-                        CHATBOT
+>
 
-                    </span>
+🎙️
 
+</button>
 
-                </div>
 
 
-            </button>
+</div>
 
 
 
 
-        </div>
 
+</div>
 
-    );
+
+}
+
+
+
+
+
+
+
+<button
+
+className="assistant-bulle"
+
+onClick={()=>setOuvert(!ouvert)}
+
+>
+
+
+<div className="floating-ai">
+
+
+<div>
+
+🤖🎙️
+
+</div>
+
+
+<span>
+
+CHATBOT
+
+</span>
+
+
+</div>
+
+
+</button>
+
+
+
+
+
+</div>
+
+
+);
 
 
 }
