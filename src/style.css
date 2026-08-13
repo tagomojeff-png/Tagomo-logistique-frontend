@@ -2299,3 +2299,1449 @@ line-height:1.6;
     }
 
 }
+
+/* =================================
+   TYSON LOGISTICS MOBILE RESPONSIVE
+================================= */
+
+
+
+@media (max-width: 768px) {
+
+
+
+/* GLOBAL */
+
+body {
+
+    overflow-x:hidden;
+
+}
+
+
+
+* {
+
+    box-sizing:border-box;
+
+}
+
+
+
+/* CONTAINERS */
+
+.container,
+.section,
+.home-container {
+
+    width:100%;
+
+    padding-left:18px;
+
+    padding-right:18px;
+
+}
+
+
+
+
+
+/* NAVBAR */
+
+nav,
+.navbar {
+
+    padding:15px 18px;
+
+}
+
+
+
+.navbar a {
+
+    font-size:14px;
+
+}
+
+
+
+/* HERO HOME */
+
+.hero {
+
+    min-height:auto;
+
+    padding:50px 20px;
+
+    text-align:center;
+
+}
+
+
+
+.hero h1 {
+
+    font-size:34px;
+
+    line-height:1.15;
+
+}
+
+
+
+.hero p {
+
+    font-size:16px;
+
+}
+
+
+
+/* BUTTONS */
+
+
+button,
+.btn {
+
+    width:100%;
+
+    max-width:350px;
+
+    margin:8px auto;
+
+}
+
+
+
+/* SERVICES */
+
+
+.services-container,
+.cards,
+.service-grid {
+
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+
+}
+
+
+
+.card {
+
+
+    width:100%;
+
+    padding:20px;
+
+
+}
+
+
+
+/* CALCULATEUR */
+
+
+.calculator {
+
+
+    width:100%;
+
+    padding:20px;
+
+
+}
+
+
+
+input,
+select {
+
+
+    width:100%;
+
+    font-size:16px;
+
+}
+
+
+
+/* SUIVI COLIS */
+
+
+.tracking-box {
+
+
+    width:100%;
+
+    padding:20px;
+
+
+}
+
+
+
+.tracking-box input {
+
+
+    height:50px;
+
+}
+
+
+
+
+/* TABLE ADMIN */
+
+
+table {
+
+
+    font-size:12px;
+
+
+}
+
+
+
+.table-container {
+
+
+    overflow-x:auto;
+
+
+}
+
+
+
+/* FOOTER */
+
+
+footer {
+
+
+    text-align:center;
+
+    padding:25px 15px;
+
+
+}
+
+
+
+
+}
+
+
+
+
+
+
+/* PETITS TELEPHONES */
+
+@media(max-width:420px){
+
+
+
+.hero h1 {
+
+
+    font-size:28px;
+
+
+}
+
+
+
+.hero p {
+
+
+    font-size:14px;
+
+
+}
+
+
+
+.card {
+
+
+    padding:15px;
+
+
+}
+
+
+
+}
+
+/* =====================================
+   HOME MOBILE PREMIUM TYSON LOGISTICS
+===================================== */
+
+
+@media (max-width:768px){
+
+
+
+/* HEADER MOBILE */
+
+header {
+
+    position:relative;
+
+    padding:15px 20px;
+
+}
+
+
+
+.logo {
+
+    justify-content:center;
+
+    width:100%;
+
+}
+
+
+
+.logo img {
+
+    max-width:150px;
+
+    height:auto;
+
+}
+
+
+
+
+
+/* HERO */
+
+.hero {
+
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+
+    padding:45px 20px;
+
+
+}
+
+
+
+.hero h1 {
+
+
+    font-size:32px;
+
+    font-weight:800;
+
+    text-align:center;
+
+
+}
+
+
+
+.hero h1 span {
+
+
+    display:block;
+
+
+}
+
+
+
+.hero p {
+
+
+    text-align:center;
+
+    line-height:1.6;
+
+    max-width:350px;
+
+
+}
+
+
+
+/* ACTIONS PRINCIPALES */
+
+
+.hero-buttons {
+
+
+    display:flex;
+
+    flex-direction:column;
+
+    width:100%;
+
+    gap:12px;
+
+
+}
+
+
+
+.hero-buttons button {
+
+
+    height:52px;
+
+    border-radius:15px;
+
+    font-size:16px;
+
+
+}
+
+
+
+/* CARTES SERVICES */
+
+
+.services {
+
+
+    padding:30px 15px;
+
+
+}
+
+
+
+.service-card {
+
+
+    border-radius:25px;
+
+    padding:22px;
+
+
+    box-shadow:
+
+    0 10px 30px rgba(0,0,0,.08);
+
+
+}
+
+
+
+/* ICONES */
+
+
+.service-card img {
+
+
+    width:55px;
+
+
+}
+
+
+
+
+
+/* SECTION SUIVI */
+
+
+.tracking-section {
+
+
+    margin:20px 15px;
+
+    padding:25px;
+
+
+    border-radius:25px;
+
+
+}
+
+
+
+.tracking-section h2 {
+
+
+    font-size:24px;
+
+    text-align:center;
+
+
+}
+
+
+
+
+
+/* WHATSAPP FLOAT */
+
+
+.whatsapp-button {
+
+
+    width:60px;
+
+    height:60px;
+
+
+    right:18px;
+
+    bottom:90px;
+
+
+}
+
+
+
+
+
+
+}
+
+
+
+/* ECRANS TRES PETITS */
+
+
+@media(max-width:400px){
+
+
+.hero h1 {
+
+
+    font-size:27px;
+
+
+}
+
+
+.hero {
+
+
+    padding-top:30px;
+
+}
+
+
+
+}
+
+/* =====================================
+   SUIVI COLIS MOBILE PREMIUM
+===================================== */
+
+
+@media(max-width:768px){
+
+
+
+/* CONTENEUR SUIVI */
+
+.suivi-container,
+.tracking-container {
+
+
+    width:100%;
+
+    padding:20px 15px;
+
+
+}
+
+
+
+/* CARTE PRINCIPALE */
+
+
+.tracking-card,
+.suivi-card {
+
+
+    width:100%;
+
+
+    border-radius:28px;
+
+
+    padding:25px 20px;
+
+
+    background:white;
+
+
+    box-shadow:
+
+    0 15px 40px rgba(0,0,0,.08);
+
+
+}
+
+
+
+
+
+/* TITRE */
+
+
+.tracking-card h1,
+.suivi-card h1 {
+
+
+    font-size:26px;
+
+
+    text-align:center;
+
+
+}
+
+
+
+
+
+/* INPUT NUMERO */
+
+
+.tracking-card input,
+.suivi-card input {
+
+
+    width:100%;
+
+
+    height:55px;
+
+
+    border-radius:18px;
+
+
+    border:1px solid #ddd;
+
+
+    padding:0 18px;
+
+
+    font-size:16px;
+
+
+    margin-top:15px;
+
+
+}
+
+
+
+
+/* BOUTON RECHERCHE */
+
+
+.tracking-card button,
+.suivi-card button {
+
+
+    width:100%;
+
+
+    height:55px;
+
+
+    margin-top:15px;
+
+
+    border-radius:18px;
+
+
+    border:none;
+
+
+    font-size:16px;
+
+
+    font-weight:700;
+
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #2563eb,
+        #22c55e
+    );
+
+
+    color:white;
+
+
+}
+
+
+
+
+
+/* RESULTAT COLIS */
+
+
+.colis-result,
+.tracking-result {
+
+
+    margin-top:25px;
+
+
+    border-radius:25px;
+
+
+    padding:20px;
+
+
+    background:#f8fafc;
+
+
+}
+
+
+
+
+
+/* INFORMATIONS */
+
+
+.colis-result p,
+.tracking-result p {
+
+
+    font-size:15px;
+
+
+    margin:10px 0;
+
+
+}
+
+
+
+/* STATUT */
+
+
+.status {
+
+
+    display:inline-flex;
+
+
+    padding:8px 15px;
+
+
+    border-radius:20px;
+
+
+    font-weight:700;
+
+
+    background:#dcfce7;
+
+
+    color:#166534;
+
+
+}
+
+
+
+
+
+}
+
+
+
+/* PETITS TELEPHONES */
+
+
+@media(max-width:420px){
+
+
+
+.tracking-card h1,
+.suivi-card h1 {
+
+
+    font-size:22px;
+
+
+}
+
+
+
+.tracking-card,
+.suivi-card {
+
+
+    padding:20px 15px;
+
+
+}
+
+
+
+}
+
+/* ======================================
+   TYSON LOGISTICS - SUIVI COLIS PREMIUM
+   IOS STYLE
+====================================== */
+
+
+.tracking-page {
+
+    min-height:100vh;
+
+    padding:30px;
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #020617,
+        #082f6d,
+        #001b3a
+    );
+
+    color:white;
+
+}
+
+
+
+/* ======================
+ NAVIGATION
+====================== */
+
+
+.tracking-nav {
+
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:20px;
+
+    margin-bottom:30px;
+
+
+}
+
+
+
+.tracking-nav button {
+
+
+    padding:14px 35px;
+
+
+    border-radius:30px;
+
+
+    border:1px solid rgba(255,255,255,.15);
+
+
+    background:
+
+    rgba(255,255,255,.08);
+
+
+    color:white;
+
+
+    font-size:16px;
+
+
+    cursor:pointer;
+
+
+    backdrop-filter:blur(10px);
+
+
+}
+
+
+
+.tracking-nav .active {
+
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #2563eb,
+        #0ea5e9
+    );
+
+
+    box-shadow:
+
+    0 10px 30px rgba(37,99,235,.4);
+
+
+}
+
+
+
+
+/* ======================
+ HERO
+====================== */
+
+
+.tracking-hero {
+
+
+    max-width:1100px;
+
+    margin:auto;
+
+
+    display:flex;
+
+
+    justify-content:space-between;
+
+
+    align-items:center;
+
+
+    padding:50px 20px;
+
+
+}
+
+
+
+.tracking-text h1 {
+
+
+    font-size:48px;
+
+
+    margin-bottom:20px;
+
+
+    font-weight:800;
+
+
+}
+
+
+
+.tracking-text p {
+
+
+    font-size:22px;
+
+
+    color:#dbeafe;
+
+
+    line-height:1.6;
+
+
+}
+
+
+
+.tracking-text b {
+
+
+    color:#38bdf8;
+
+
+}
+
+
+
+.package-icon {
+
+
+    font-size:90px;
+
+
+    animation:
+
+    floatBox 3s infinite;
+
+
+}
+
+
+
+@keyframes floatBox {
+
+
+    50%{
+
+        transform:translateY(-15px);
+
+    }
+
+}
+
+
+
+
+
+/* ======================
+ CARTE RECHERCHE
+====================== */
+
+
+.tracking-card {
+
+
+    max-width:900px;
+
+
+    margin:20px auto;
+
+
+    padding:45px;
+
+
+    border-radius:35px;
+
+
+    background:white;
+
+
+    color:#0f172a;
+
+
+    text-align:center;
+
+
+    box-shadow:
+
+
+    0 30px 80px rgba(0,0,0,.35);
+
+
+}
+
+
+
+
+.search-icon {
+
+
+    width:60px;
+
+    height:60px;
+
+
+    border-radius:50%;
+
+
+    background:#dbeafe;
+
+
+    display:flex;
+
+
+    align-items:center;
+
+
+    justify-content:center;
+
+
+    margin:auto;
+
+
+    font-size:30px;
+
+
+}
+
+
+
+.tracking-card h2 {
+
+
+    font-size:32px;
+
+
+    margin-top:20px;
+
+
+}
+
+
+
+.tracking-card p {
+
+
+    color:#64748b;
+
+
+    font-size:18px;
+
+
+}
+
+
+
+
+.tracking-card input {
+
+
+    width:100%;
+
+
+    height:60px;
+
+
+    border-radius:18px;
+
+
+    border:2px solid #2563eb;
+
+
+    padding:0 20px;
+
+
+    font-size:18px;
+
+
+    margin-top:25px;
+
+
+    outline:none;
+
+
+}
+
+
+
+
+
+.tracking-card button {
+
+
+    width:100%;
+
+
+    height:60px;
+
+
+    margin-top:20px;
+
+
+    border:none;
+
+
+    border-radius:18px;
+
+
+    color:white;
+
+
+    font-size:18px;
+
+
+    font-weight:700;
+
+
+    cursor:pointer;
+
+
+    background:
+
+
+    linear-gradient(
+        90deg,
+        #2563eb,
+        #22c55e
+    );
+
+
+    box-shadow:
+
+
+    0 15px 30px rgba(34,197,94,.25);
+
+
+}
+
+
+
+
+/* ======================
+ RESULTAT
+====================== */
+
+
+.colis-result {
+
+
+    margin-top:30px;
+
+
+    padding:25px;
+
+
+    border-radius:25px;
+
+
+    background:#f1f5f9;
+
+
+    text-align:left;
+
+
+}
+
+
+
+.status {
+
+
+    display:inline-block;
+
+
+    margin-top:15px;
+
+
+    padding:10px 20px;
+
+
+    border-radius:25px;
+
+
+    background:#dcfce7;
+
+
+    color:#166534;
+
+
+    font-weight:700;
+
+
+}
+
+
+
+
+.tracking-error {
+
+
+    margin-top:20px;
+
+
+    padding:15px;
+
+
+    border-radius:15px;
+
+
+    background:#fee2e2;
+
+
+    color:#991b1b;
+
+
+}
+
+
+
+/* ======================
+ SECURITE
+====================== */
+
+
+.security-box {
+
+
+    max-width:900px;
+
+
+    margin:30px auto;
+
+
+    padding:20px;
+
+
+    border-radius:20px;
+
+
+    background:
+
+    rgba(255,255,255,.08);
+
+
+    text-align:center;
+
+
+    color:#d1fae5;
+
+
+    font-size:18px;
+
+
+}
+
+
+
+
+
+
+/* ======================
+ MOBILE
+====================== */
+
+
+@media(max-width:768px){
+
+
+.tracking-page {
+
+
+    padding:15px;
+
+
+}
+
+
+
+.tracking-nav {
+
+
+    gap:10px;
+
+
+}
+
+
+
+.tracking-nav button {
+
+
+    padding:12px 20px;
+
+
+    font-size:14px;
+
+
+}
+
+
+
+.tracking-hero {
+
+
+    flex-direction:column;
+
+
+    text-align:center;
+
+
+    padding:30px 10px;
+
+
+}
+
+
+
+.tracking-text h1 {
+
+
+    font-size:32px;
+
+
+}
+
+
+
+.tracking-text p {
+
+
+    font-size:16px;
+
+
+}
+
+
+
+.package-icon {
+
+
+    font-size:60px;
+
+
+    margin-top:20px;
+
+
+}
+
+
+
+
+.tracking-card {
+
+
+    padding:25px 18px;
+
+
+    border-radius:25px;
+
+
+}
+
+
+
+.tracking-card h2 {
+
+
+    font-size:24px;
+
+
+}
+
+
+
+.tracking-card input {
+
+
+    font-size:15px;
+
+
+}
+
+
+
+.security-box {
+
+
+    font-size:14px;
+
+
+}
+
+
+}

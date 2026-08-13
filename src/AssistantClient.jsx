@@ -6,6 +6,7 @@ const API_URL =
 "https://tagomo-logistique-backend-production.up.railway.app/ai/chat";
 
 
+
 function AssistantClient(){
 
 
@@ -16,15 +17,18 @@ function AssistantClient(){
     const [loading,setLoading] = useState(false);
 
 
+
     const [messages,setMessages] = useState([
 
         {
             type:"bot",
             texte:
-            "Bonjour 👋\n\nJe suis Tyson AI 🤖\nComment puis-je vous aider aujourd'hui ?"
+            "Bonjour 👋\n\nJe suis Tyson AI 🤖🎙️\nVotre assistant officiel Tyson Logistics.\n\nComment puis-je vous aider aujourd'hui ?"
         }
 
     ]);
+
+
 
 
 
@@ -35,17 +39,17 @@ function AssistantClient(){
 
 
 
-        const userMessage = message;
+        const nouveauMessage = message;
 
 
 
-        setMessages(prev => [
+        setMessages((prev)=>[
 
             ...prev,
 
             {
                 type:"user",
-                texte:userMessage
+                texte:nouveauMessage
             }
 
         ]);
@@ -78,10 +82,11 @@ function AssistantClient(){
 
                     body:JSON.stringify({
 
-                        message:userMessage,
+                        message:nouveauMessage,
 
 
-                        history:messages.map(m=>({
+                        history:messages.map((m)=>({
+
 
                             role:
                             m.type==="user"
@@ -90,11 +95,15 @@ function AssistantClient(){
                             :
                             "assistant",
 
+
                             content:m.texte
+
 
                         }))
 
+
                     })
+
 
                 }
 
@@ -106,7 +115,8 @@ function AssistantClient(){
 
 
 
-            setMessages(prev=>[
+
+            setMessages((prev)=>[
 
                 ...prev,
 
@@ -114,7 +124,11 @@ function AssistantClient(){
 
                     type:"bot",
 
-                    texte:data.reply
+                    texte:
+
+                    data.reply ||
+
+                    "Je n'ai pas reçu de réponse."
 
                 }
 
@@ -127,23 +141,26 @@ function AssistantClient(){
         catch(error){
 
 
-            setMessages(prev=>[
+            console.error(error);
+
+
+
+            setMessages((prev)=>[
 
                 ...prev,
+
 
                 {
 
                     type:"bot",
 
                     texte:
-                    "Désolé, Tyson AI est momentanément indisponible."
+
+                    "⚠️ Tyson AI est momentanément indisponible. Veuillez réessayer."
 
                 }
 
             ]);
-
-
-            console.log(error);
 
 
         }
@@ -159,7 +176,9 @@ function AssistantClient(){
 
 
 
+
     return (
+
 
         <div className="assistant-client">
 
@@ -167,32 +186,66 @@ function AssistantClient(){
 
             {
 
+
             ouvert &&
 
+
             <div className="assistant-window">
+
 
 
                 <div className="assistant-header">
 
 
-                    <div>
+
+                    <div className="ai-brand">
 
 
-                        🤖 Tyson AI Business
+                        <div className="ai-avatar">
+
+                            🤖🎙️
+
+                        </div>
 
 
-                        <span className="online">
 
-                            🟢 Online
+                        <div>
 
-                        </span>
+
+                            <div className="ai-title">
+
+                                Tyson AI
+
+                            </div>
+
+
+                            <div className="ai-role">
+
+                                CHATBOT
+
+                            </div>
+
+
+
+                            <div className="online">
+
+                                🟢 Online
+
+                            </div>
+
+
+                        </div>
 
 
                     </div>
 
 
 
+
+
                     <button
+
+                    className="close-btn"
 
                     onClick={()=>setOuvert(false)}
 
@@ -200,11 +253,12 @@ function AssistantClient(){
 
                         ✕
 
-
                     </button>
 
 
+
                 </div>
+
 
 
 
@@ -214,59 +268,69 @@ function AssistantClient(){
 
 
 
-                {
+                    {
 
-                messages.map((m,index)=>(
+                    messages.map((m,index)=>(
 
 
-                    <div
+                        <div
 
-                    key={index}
+                        key={index}
 
-                    className={
+                        className={
 
-                        m.type==="bot"
+                            m.type==="bot"
 
-                        ?
+                            ?
 
-                        "bubble bot"
+                            "bubble bot"
 
-                        :
+                            :
 
-                        "bubble user"
+                            "bubble user"
+
+                        }
+
+
+                        >
+
+                            {m.texte}
+
+
+                        </div>
+
+
+                    ))
 
                     }
 
 
-                    >
 
-                        {m.texte}
+
+
+                    {
+
+                    loading &&
+
+
+                    <div className="bubble bot typing">
+
+
+                        Tyson AI écrit...
 
 
                     </div>
 
 
-                ))
-
-                }
+                    }
 
 
-
-                {
-
-                loading &&
-
-                <div className="bubble bot">
-
-                    Tyson AI écrit...
-
-                </div>
-
-                }
 
 
 
                 </div>
+
+
 
 
 
@@ -275,24 +339,37 @@ function AssistantClient(){
                 <div className="assistant-input">
 
 
+
                     <input
+
 
                     value={message}
 
-                    placeholder="Votre message..."
+
+                    placeholder="Écrivez votre message..."
+
 
                     onChange={
-                        e=>setMessage(e.target.value)
+
+                        (e)=>
+
+                        setMessage(e.target.value)
+
                     }
+
 
 
                     onKeyDown={
 
-                        e=>{
+                        (e)=>{
 
-                            if(e.key==="Enter")
 
-                            envoyerMessage();
+                            if(e.key==="Enter"){
+
+                                envoyerMessage();
+
+                            }
+
 
                         }
 
@@ -302,52 +379,72 @@ function AssistantClient(){
                     />
 
 
+
+
+
                     <button
 
                     onClick={envoyerMessage}
 
                     >
 
-                        ➤
+                        🎙️
 
                     </button>
+
 
 
                 </div>
 
 
 
+
             </div>
+
+
 
             }
 
 
 
 
+
+
+
             <button
+
 
             className="assistant-bulle"
 
+
             onClick={()=>setOuvert(!ouvert)}
+
 
             >
 
-                {
 
-                ouvert
+                <div className="floating-ai">
 
-                ?
 
-                "✕"
+                    <div>
 
-                :
+                        🤖🎙️
 
-                "💬"
+                    </div>
 
-                }
+
+                    <span>
+
+                        CHATBOT
+
+                    </span>
+
+
+                </div>
 
 
             </button>
+
 
 
 

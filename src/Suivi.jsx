@@ -1,246 +1,299 @@
 import { useState } from "react";
-import API from "./api";
+import "./style.css";
 
 
-function Suivi() {
-
-    const [numero, setNumero] = useState("");
-    const [colis, setColis] = useState(null);
-    const [erreur, setErreur] = useState("");
+function Suivi(){
 
 
-    const etapes = [
-        "Reçu en Chine",
-        "Préparation expédition",
-        "En transit",
-        "Arrivé Cameroun",
-        "Livré"
-    ];
+    const [numero,setNumero] = useState("");
+
+    const [colis,setColis] = useState(null);
+
+    const [erreur,setErreur] = useState("");
 
 
-    async function rechercherColis() {
 
-        const code = numero.trim();
+    async function rechercher(){
 
 
-        if (!code) {
-            setErreur("Veuillez entrer un numéro de suivi");
-            setColis(null);
+        if(!numero.trim()){
+
+            setErreur("Veuillez entrer votre numéro de suivi.");
+
             return;
+
         }
 
 
-        try {
 
-            const response = await API.get(`/suivi/${code}`);
+        try{
 
-            setColis(response.data);
+
+            const response = await fetch(
+
+            `https://tagomo-logistique-backend-production.up.railway.app/suivi/${numero}`
+
+            );
+
+
+            if(!response.ok){
+
+                throw new Error();
+
+            }
+
+
+
+            const data = await response.json();
+
+
+            setColis(data);
+
             setErreur("");
 
-        } catch(error) {
 
-            console.log(error.response?.data || error);
-
-            setErreur("Colis introuvable");
-            setColis(null);
 
         }
 
+        catch{
+
+
+            setColis(null);
+
+            setErreur("Colis introuvable. Vérifiez votre numéro TYC.");
+
+        }
+
+
     }
 
-
-
-    function positionStatut(statut){
-
-        const index = etapes.findIndex(
-            e => e === statut
-        );
-
-        return index === -1 ? 0 : index;
-
-    }
 
 
 
     return (
 
-        <div className="suivi-page">
 
+<div className="tracking-page">
 
-            <div className="suivi-card">
 
 
-                <h1>
-                    TYSON & CO
-                </h1>
+    <div className="tracking-nav">
 
 
-                <p>
-                    Suivi de votre colis
-                </p>
+        <button className="active">
 
+            📦 Suivi colis
 
+        </button>
 
-                <div className="tracking-search">
 
+        <button>
 
-                    <input
+            🛡️ Admin
 
-                        placeholder="Ex: TYC-7422086030"
+        </button>
 
-                        value={numero}
 
-                        onChange={
-                            e=>setNumero(e.target.value)
-                        }
+    </div>
 
-                    />
 
 
-                    <button onClick={rechercherColis}>
 
-                        Rechercher
 
-                    </button>
+    <section className="tracking-hero">
 
 
-                </div>
+        <div className="tracking-text">
 
 
+            <h1>
 
+                Suivi de votre colis
 
-                {
-                    erreur &&
+            </h1>
 
-                    <p className="error">
 
-                        {erreur}
+            <p>
 
-                    </p>
+                Entrez votre numéro de suivi <b>TYC</b>
 
-                }
+                <br/>
 
+                pour connaître l'état de votre colis en temps réel.
 
-
-
-
-                {
-                    colis &&
-
-
-                    <div className="result-card">
-
-
-                        <h2>
-                            Colis trouvé ✅
-                        </h2>
-
-
-
-                        <p>
-                            Numéro :
-                            {colis.numero_suivi}
-                        </p>
-
-
-                        <p>
-                            Client :
-                            {colis.client}
-                        </p>
-
-
-                        <p>
-                            Destination :
-                            {colis.destination}
-                        </p>
-
-
-
-                        <h2>
-                            Progression
-                        </h2>
-
-
-
-
-                        <div className="timeline">
-
-
-                        {
-                            etapes.map((etape,index)=>(
-                                
-                                <div
-
-                                key={etape}
-
-                                className={
-                                    index <= positionStatut(colis.statut)
-                                    ?
-                                    "step active"
-                                    :
-                                    "step"
-                                }
-
-                                >
-
-
-                                    <div className="circle">
-
-                                        {
-                                            index <= positionStatut(colis.statut)
-                                            ?
-                                            "✓"
-                                            :
-                                            index+1
-                                        }
-
-                                    </div>
-
-
-                                    <div>
-
-                                        <h3>
-                                            {etape}
-                                        </h3>
-
-
-                                        {
-                                            index === positionStatut(colis.statut)
-                                            &&
-                                            <p>
-                                                Statut actuel
-                                            </p>
-                                        }
-
-
-                                    </div>
-
-
-                                </div>
-
-                            ))
-
-                        }
-
-
-                        </div>
-
-
-
-                    </div>
-
-                }
-
-
-
-            </div>
+            </p>
 
 
         </div>
 
+
+
+        <div className="package-icon">
+
+            
+
+        </div>
+
+
+    </section>
+
+
+
+
+
+
+
+    <div className="tracking-card">
+
+
+        <div className="search-icon">
+
+            
+
+        </div>
+
+
+
+        <h2>
+
+            📦Rechercher un colis
+
+        </h2>
+
+
+
+        <p>
+
+            Saisissez votre numéro de suivi
+
+            <br/>
+
+            Exemple : TYC-1234567890
+
+        </p>
+
+
+
+        <input
+
+        value={numero}
+
+        placeholder="Ex : TYC-1234567890"
+
+        onChange={(e)=>setNumero(e.target.value)}
+
+        />
+
+
+
+
+
+        <button
+
+        onClick={rechercher}
+
+        >
+
+             Rechercher
+
+        </button>
+
+
+
+
+
+        {
+
+        erreur &&
+
+        <div className="tracking-error">
+
+            {erreur}
+
+        </div>
+
+        }
+
+
+
+
+
+        {
+
+        colis &&
+
+
+        <div className="colis-result">
+
+
+            <h3>
+
+                 Informations colis
+
+            </h3>
+
+
+            <p>
+
+                Client : {colis.client}
+
+            </p>
+
+
+            <p>
+
+                Produit : {colis.produit}
+
+            </p>
+
+
+            <p>
+
+                Destination : {colis.destination}
+
+            </p>
+
+
+            <span className="status">
+
+                {colis.statut}
+
+            </span>
+
+
+        </div>
+
+
+        }
+
+
+
+    </div>
+
+
+
+
+
+
+    <div className="security-box">
+
+        🔐 Vos informations sont sécurisées et confidentielles.
+
+    </div>
+
+
+
+
+
+</div>
+
+
+
     );
 
+
 }
+
 
 
 export default Suivi;
